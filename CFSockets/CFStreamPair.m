@@ -153,17 +153,20 @@
 	// tricky. How to dissect the line from any remaining characters? Simply
 	// convert the remaining characters back to data using the given encoding.
 	NSString *result;
-	NSString *requestString = [[NSString alloc] initWithData:[self requestBuffer] encoding:encoding];
+    NSString *requestString = [[NSString alloc] initWithData:[self requestBuffer] encoding:encoding];
+    requestString = [requestString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    
 	NSRange lineRange = [requestString lineRangeForRange:NSMakeRange(0, 0)];
 	if (lineRange.length)
 	{
-		[[self requestBuffer] setData:[[requestString substringFromIndex:lineRange.length] dataUsingEncoding:encoding]];
-		result = [requestString substringToIndex:lineRange.length];
+        [[self requestBuffer] setData:[[requestString substringFromIndex:lineRange.length] dataUsingEncoding:encoding]];
+        result = [requestString substringToIndex:lineRange.length];
 	}
 	else
 	{
 		result = nil;
-	}
+    }
 	return result;
 }
 
